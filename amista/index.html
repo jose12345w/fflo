@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Para ti - Día de la Amistad</title>
+
+<style>
+  :root{
+    --bg1:#fff8e6; /* fondo suave */
+    --accent:#ffb400; /* amarillo cariño */
+    --text:#2b2b2b;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(180deg,var(--bg1), #fff);
+    color:var(--text);
+    min-height:100vh;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+
+  /* contenedor principal centrado */
+  .card{
+    width:100%;
+    max-width:900px;
+    background: rgba(255,255,255,0.95);
+    border-radius:16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    overflow:hidden;
+  }
+
+  header{
+    background: linear-gradient(90deg, #ffecb3, #fff1c0);
+    padding:18px 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    font-weight:700;
+    color: #6b3e00;
+  }
+  .logo img{ width:44px; height:44px; border-radius:8px; object-fit:cover; border:2px solid white; box-shadow:0 3px 6px rgba(0,0,0,0.12); }
+
+  .menu{ color:#4b4b4b; font-size:14px; opacity:0.9; }
+  .btn-start{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 12px rgba(255,180,0,0.18);
+  }
+
+  /* sección principal: izquierda texto y derecha imagen grande */
+  .hero{
+    display:flex;
+    gap:18px;
+    padding:24px;
+    align-items:stretch;
+    flex-wrap:wrap;
+  }
+  .hero-left{
+    flex:1 1 320px;
+    min-width:260px;
+  }
+  .hero-right{
+    flex:1 1 320px;
+    min-width:260px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .poem {
+    background: linear-gradient(180deg,#fff,#fffef5);
+    border-radius:12px;
+    padding:18px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    line-height:1.6;
+    font-size:18px;
+    color:#2b2b2b;
+  }
+
+  .poem .title {
+    font-weight:800;
+    color:#a65b00;
+    margin-bottom:8px;
+    font-size:20px;
+  }
+
+  .poem p{
+    margin:8px 0;
+  }
+
+  /* imagen decorativa (tú la puedes reemplazar) */
+  .main-photo{
+    width:100%;
+    height:220px;
+    max-width:360px;
+    border-radius:12px;
+    background-image:url('flower-sample.jpg'); /* Reemplaza si quieres */
+    background-size:cover;
+    background-position:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    position:relative;
+  }
+
+  /* área de "flores" y "grilla" */
+  .grid-area{
+    padding:18px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+  }
+  .grid-item{
+    background:#fff;
+    border-radius:8px;
+    height:80px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 6px 14px rgba(0,0,0,0.06);
+    flex-direction:column;
+  }
+  .grid-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:6px;
+  }
+
+  footer{
+    padding:12px;
+    text-align:center;
+    font-size:13px;
+    color:#666;
+  }
+
+  /* ANIMACIONES: flores y corazones */
+  .float-item{
+    position:fixed;
+    top:-10vh;
+    pointer-events:none;
+    animation-name:fall;
+    animation-timing-function:linear;
+    opacity:0.95;
+    transform-origin:center;
+  }
+  @keyframes fall{
+    to{
+      transform: translateY(120vh) rotate(360deg);
+      opacity:0.95;
+    }
+  }
+
+  /* mensaje: aparece cuando inicia */
+  #surpriseMsg{
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%) scale(0.9);
+    z-index:60;
+    width:90%;
+    max-width:760px;
+    text-align:center;
+    padding:18px;
+    border-radius:14px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), #fff7eb);
+    display:none;
+  }
+  #surpriseMsg h2{ color:#b85b00; margin-bottom:6px; font-size:22px; }
+  #surpriseMsg p{ font-size:18px; margin:0 0 12px 0; color:#333 }
+
+  /* boton cerrar dentro del mensaje */
+  .close-btn{
+    background:transparent;
+    border:2px solid var(--accent);
+    color:var(--accent);
+    padding:6px 10px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+  }
+
+  /* responsive */
+  @media (max-width:720px){
+    .grid-area{ grid-template-columns:repeat(2,1fr) }
+    .hero{ padding:14px }
+    .main-photo{ max-width:100%; height:200px }
+    .poem{ font-size:16px }
+  }
+
+</style>
+</head>
+
+<body>
+  <div class="card">
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <!-- Ejemplo de logo: reemplaza logo.jpg con tu imagen -->
+        <img src="whast.webp" alt="logo ejemplo" onerror="this.style.display='none'">
+        Adopta una Joya
+      </div>
+
+      <div class="menu">Inicio &nbsp; • &nbsp; Sorpresa &nbsp; • &nbsp; Mensaje</div>
+
+      <button class="btn-start" id="startBtn">Haz clic para tu sorpresa 🌻</button>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="poem">
+          <div class="title">Un poema de perdón para mi amiga</div>
+          <!-- Poema creado para la ocasión -->
+          <p>Amiga, perdona si a veces callé,</p>
+          <p>si mis palabras fueron sombras en tu sol;</p>
+          <p>hoy traigo flores de luz, pido perdón,</p>
+          <p>y ofrezco mi risa y un nuevo corazón.</p>
+          <p>Que quede la distancia en un suspiro leve,</p>
+          <p>y nazca otra vez la confianza que se mueve;</p>
+          <p>te doy mi amistad sin condiciones, sin medida,</p>
+          <p>porque tu sonrisa es la parte más bonita de mi vida.</p>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <!-- Imagen decorativa: reemplaza 'mascota-banner.jpg' por tu foto si quieres -->
+        <div class="main-photo" id="mainPhoto"
+             style="background-image: url('whast.webp');">
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid de pequeñas tarjetas (puedes reemplazar por fotos) -->
+    <div class="grid-area" id="gridArea">
+      <!-- Pon ejemplos de imágenes; reemplázalas por tus archivos -->
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+      <div class="grid-item"><img src="whast.webp" alt="" onerror="this.style.display='none'"></div>
+    </div>
+
+    <footer>Con cariño — tu amiga 💛</footer>
+  </div>
+
+  <!-- Mensaje sorpresa que aparece encima -->
+  <div id="surpriseMsg" role="dialog" aria-hidden="true">
+    <h2>Perdón, amiga 💛</h2>
+    <p>Abre este regalo con el corazón — todo lo que quise fue cuidar nuestra amistad.</p>
+    <button class="close-btn" id="closeBtn">Cerrar</button>
+  </div>
+
+  <!-- AUDIO (SE INICIA AL HACER CLIC) -->
+  <!-- Cambia "musica.mp3" por el nombre de tu archivo aquí abajo si tienes uno -->
+  <audio id="audio" src="flores.mp3" preload="auto"></audio>
+
+<script>
+/* 
+  INSTRUCCIONES:
+  - Reemplaza musica.mp3 por tu archivo de audio si lo deseas.
+  - Reemplaza logo.jpg, mascota-banner.jpg, mini1.jpg ... mini8.jpg por tus imágenes.
+  - Si no pones imagenes, los placeholders se ocultan automáticamente.
+*/
+
+// elementos
+const startBtn = document.getElementById('startBtn');
+const surprise = document.getElementById('surpriseMsg');
+const closeBtn = document.getElementById('closeBtn');
+const audio = document.getElementById('audio');
+
+// función que crea N objetos flotantes (flores amarillas y corazones)
+function crearFloresYCorazones(cantidad){
+  for(let i=0;i<cantidad;i++){
+    // elegimos emoji: mayor probabilidad para flor amarilla 🌻
+    const tipo = Math.random() < 0.8 ? '🌻' : (Math.random()<0.5 ? '💛' : '🦋');
+    const el = document.createElement('div');
+    el.className = 'float-item';
+    el.style.left = Math.random()*100 + 'vw';
+    el.style.fontSize = (18 + Math.random()*40) + 'px';
+    // variar duración y delay para que parezca natural
+    const dur = 6 + Math.random()*6; // 6s a 12s
+    el.style.animationDuration = dur + 's';
+    el.style.animationDelay = (Math.random()*2) + 's';
+    el.style.zIndex = 50 + Math.floor(Math.random()*50);
+    el.textContent = tipo;
+    document.body.appendChild(el);
+
+    // eliminar después de que termine la animación para no acumular
+    setTimeout(()=>{ el.remove(); }, (dur+2)*1000);
+  }
+}
+
+// al empezar: reproducir música y mostrar mensaje
+startBtn.addEventListener('click', function(){
+  // reproducir audio (los navegadores permiten la reproducción si hay interacción)
+  if(audio){
+    audio.currentTime = 0;
+    audio.play().catch(()=>{ /* si falla, no pasa nada */ });
+  }
+
+  // crear muchas flores en ráfaga
+  crearFloresYCorazones(24);
+
+  // mostrar mensaje sorpresa
+  surprise.style.display = 'block';
+  surprise.setAttribute('aria-hidden','false');
+
+  // también crear flores periódicamente durante 10s
+  let bursts = 0;
+  const interval = setInterval(()=>{
+    crearFloresYCorazones(8);
+    bursts++;
+    if(bursts>6) clearInterval(interval);
+  }, 900);
+});
+
+// cerrar mensaje
+closeBtn.addEventListener('click', function(){
+  surprise.style.display = 'none';
+  surprise.setAttribute('aria-hidden','true');
+});
+
+// consejo: si quieres añadir un botón de pausa para la música, podrías hacerlo aquí
+</script>
+</body>
+</html>
